@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "../data"
+		},
+		{
+			"path": "../dataset Updated"
+		},
+		{
+			"path": "../models"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../static"
+		},
+		{
+			"path": "../templates"
+		}
+	]
+}

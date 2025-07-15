@@ -1,0 +1,423 @@
+<!-- Patient form template - PASTE CONTENT HERE -->
+{% extends "base.html" %}
+
+{% block title %}Patient Assessment - Hospital AI{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Page Header -->
+    <div class="col-12 mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="h2 mb-1">
+                    <i class="bi bi-person-plus text-primary"></i> Patient Assessment
+                </h1>
+                <p class="text-muted">AI-powered admission decision support</p>
+            </div>
+            <div>
+                <a href="/" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Patient Information Form -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-clipboard-data"></i> Patient Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="patientForm">
+                    <div class="mb-4">
+                        <label for="age" class="form-label">
+                            <i class="bi bi-calendar"></i> Patient Age
+                        </label>
+                        <input type="number" class="form-control" id="age" name="age" 
+                               min="0" max="120" value="45" required>
+                        <div class="form-text">Age in years (0-120)</div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="severity" class="form-label">
+                            <i class="bi bi-thermometer-half"></i> Medical Severity Score
+                        </label>
+                        <input type="range" class="form-range" id="severity" name="severity" 
+                               min="1" max="10" value="5">
+                        <div class="d-flex justify-content-between">
+                            <small class="text-muted">1 - Minor</small>
+                            <small class="text-muted" id="severityValue">5 - Moderate</small>
+                            <small class="text-muted">10 - Critical</small>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="arrivalType" class="form-label">
+                            <i class="bi bi-truck"></i> Arrival Type
+                        </label>
+                        <select class="form-select" id="arrivalType" name="arrival_type" required>
+                            <option value="walk-in">Walk-in</option>
+                            <option value="ambulance">Ambulance</option>
+                            <option value="referral">Referral</option>
+                            <option value="transfer">Transfer</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="predictedLos" class="form-label">
+                            <i class="bi bi-clock"></i> Predicted Length of Stay
+                        </label>
+                        <select class="form-select" id="predictedLos" name="predicted_los" required>
+                            <option value="1">1 day</option>
+                            <option value="2">2 days</option>
+                            <option value="3" selected>3 days</option>
+                            <option value="4">4 days</option>
+                            <option value="5">5 days</option>
+                            <option value="7">1 week</option>
+                            <option value="10">10 days</option>
+                            <option value="14">2 weeks</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Priority Settings -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-sliders"></i> Decision Priorities
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-4">Adjust the importance of different factors in admission decisions</p>
+                
+                <div class="mb-4">
+                    <label for="medicalPriority" class="form-label">
+                        <i class="bi bi-heart-pulse text-danger"></i> Medical Priority
+                    </label>
+                    <input type="range" class="form-range" id="medicalPriority" name="medical_priority" 
+                           min="0" max="1" step="0.1" value="0.4">
+                    <div class="d-flex justify-content-between">
+                        <small class="text-muted">Low</small>
+                        <small class="text-muted" id="medicalValue">40%</small>
+                        <small class="text-muted">High</small>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="economicPriority" class="form-label">
+                        <i class="bi bi-currency-dollar text-success"></i> Economic Priority
+                    </label>
+                    <input type="range" class="form-range" id="economicPriority" name="economic_priority" 
+                           min="0" max="1" step="0.1" value="0.3">
+                    <div class="d-flex justify-content-between">
+                        <small class="text-muted">Low</small>
+                        <small class="text-muted" id="economicValue">30%</small>
+                        <small class="text-muted">High</small>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="operationalPriority" class="form-label">
+                        <i class="bi bi-gear text-primary"></i> Operational Priority
+                    </label>
+                    <input type="range" class="form-range" id="operationalPriority" name="operational_priority" 
+                           min="0" max="1" step="0.1" value="0.3">
+                    <div class="d-flex justify-content-between">
+                        <small class="text-muted">Low</small>
+                        <small class="text-muted" id="operationalValue">30%</small>
+                        <small class="text-muted">High</small>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info alert-custom">
+                    <i class="bi bi-info-circle"></i>
+                    <strong>Total Priority:</strong> <span id="totalPriority">100%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Submit Button -->
+    <div class="col-12 mb-4">
+        <div class="text-center">
+            <button type="button" class="btn btn-primary btn-lg px-5" onclick="getAdmissionDecision()">
+                <i class="bi bi-cpu"></i> Get AI Recommendation
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Spinner -->
+<div class="loading-spinner">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Processing...</span>
+    </div>
+    <p class="mt-2">AI is analyzing patient data...</p>
+</div>
+
+<!-- Results Section -->
+<div id="resultsSection" style="display: none;">
+    <div class="row">
+        <div class="col-12">
+            <div class="card decision-result" id="decisionCard">
+                <div class="row">
+                    <!-- Main Decision -->
+                    <div class="col-lg-6 mb-4">
+                        <h4 class="mb-3">
+                            <i class="bi bi-robot"></i> AI Recommendation
+                        </h4>
+                        <div class="text-center mb-4">
+                            <div class="metric-value" id="decisionText">-</div>
+                            <div class="mt-2">
+                                <span class="badge bg-primary fs-6" id="confidenceText">-</span>
+                            </div>
+                        </div>
+                        <div class="alert alert-light">
+                            <strong>Reasoning:</strong>
+                            <p class="mb-0" id="reasoningText">-</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Scores Breakdown -->
+                    <div class="col-lg-6 mb-4">
+                        <h5 class="mb-3">
+                            <i class="bi bi-graph-up"></i> Score Breakdown
+                        </h5>
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span><i class="bi bi-heart-pulse text-danger"></i> Medical</span>
+                                <span id="medicalScore">-</span>
+                            </div>
+                            <div class="progress mb-2">
+                                <div class="progress-bar bg-danger" id="medicalBar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span><i class="bi bi-currency-dollar text-success"></i> Economic</span>
+                                <span id="economicScore">-</span>
+                            </div>
+                            <div class="progress mb-2">
+                                <div class="progress-bar bg-success" id="economicBar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span><i class="bi bi-gear text-primary"></i> Operational</span>
+                                <span id="operationalScore">-</span>
+                            </div>
+                            <div class="progress mb-2">
+                                <div class="progress-bar bg-primary" id="operationalBar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="d-flex justify-content-between mb-1">
+                                <strong>Final Score</strong>
+                                <strong id="finalScore">-</strong>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-warning" id="finalBar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Alternative Options -->
+                <div class="row">
+                    <div class="col-12">
+                        <h5 class="mb-3">
+                            <i class="bi bi-list-ul"></i> Alternative Options
+                        </h5>
+                        <div id="alternativesList">
+                            <!-- Alternatives will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="row mt-4">
+                    <div class="col-12 text-center">
+                        <button type="button" class="btn btn-success me-2" onclick="acceptRecommendation()">
+                            <i class="bi bi-check-circle"></i> Accept Recommendation
+                        </button>
+                        <button type="button" class="btn btn-outline-primary me-2" onclick="getNewRecommendation()">
+                            <i class="bi bi-arrow-clockwise"></i> New Assessment
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="printReport()">
+                            <i class="bi bi-printer"></i> Print Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Update severity display
+    document.getElementById('severity').addEventListener('input', function() {
+        const value = this.value;
+        const labels = ['', 'Minor', 'Minor', 'Mild', 'Mild', 'Moderate', 'Moderate', 'Severe', 'Severe', 'Critical', 'Critical'];
+        document.getElementById('severityValue').textContent = value + ' - ' + labels[value];
+    });
+    
+    // Update priority displays and totals
+    function updatePriorityDisplays() {
+        const medical = parseFloat(document.getElementById('medicalPriority').value);
+        const economic = parseFloat(document.getElementById('economicPriority').value);
+        const operational = parseFloat(document.getElementById('operationalPriority').value);
+        
+        document.getElementById('medicalValue').textContent = Math.round(medical * 100) + '%';
+        document.getElementById('economicValue').textContent = Math.round(economic * 100) + '%';
+        document.getElementById('operationalValue').textContent = Math.round(operational * 100) + '%';
+        
+        const total = Math.round((medical + economic + operational) * 100);
+        document.getElementById('totalPriority').textContent = total + '%';
+        
+        // Highlight if not 100%
+        if (total !== 100) {
+            document.getElementById('totalPriority').className = 'text-warning fw-bold';
+        } else {
+            document.getElementById('totalPriority').className = 'text-success fw-bold';
+        }
+    }
+    
+    document.getElementById('medicalPriority').addEventListener('input', updatePriorityDisplays);
+    document.getElementById('economicPriority').addEventListener('input', updatePriorityDisplays);
+    document.getElementById('operationalPriority').addEventListener('input', updatePriorityDisplays);
+    
+    // Get admission decision
+    function getAdmissionDecision() {
+        const formData = {
+            age: document.getElementById('age').value,
+            severity: document.getElementById('severity').value,
+            arrival_type: document.getElementById('arrivalType').value,
+            predicted_los: document.getElementById('predictedLos').value,
+            medical_priority: document.getElementById('medicalPriority').value,
+            economic_priority: document.getElementById('economicPriority').value,
+            operational_priority: document.getElementById('operationalPriority').value
+        };
+        
+        // Validate form
+        if (!formData.age || formData.age < 0 || formData.age > 120) {
+            showAlert('Please enter a valid age (0-120)', 'danger');
+            return;
+        }
+        
+        showLoading();
+        
+        fetch('/api/admission-decision', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            hideLoading();
+            
+            if (data.success) {
+                displayResults(data.result);
+            } else {
+                showAlert('Error: ' + data.error, 'danger');
+            }
+        })
+        .catch(error => {
+            hideLoading();
+            showAlert('Network error: ' + error.message, 'danger');
+        });
+    }
+    
+    // Display results
+    function displayResults(result) {
+        // Set decision text and confidence
+        document.getElementById('decisionText').textContent = result.decision;
+        document.getElementById('confidenceText').textContent = Math.round(result.confidence * 100) + '% Confidence';
+        document.getElementById('reasoningText').textContent = result.reasoning;
+        
+        // Set confidence class
+        const card = document.getElementById('decisionCard');
+        card.className = 'card decision-result ';
+        if (result.confidence >= 0.8) {
+            card.className += 'confidence-high';
+        } else if (result.confidence >= 0.6) {
+            card.className += 'confidence-moderate';
+        } else {
+            card.className += 'confidence-low';
+        }
+        
+        // Update scores
+        const scores = result.scores;
+        document.getElementById('medicalScore').textContent = scores.medical_score;
+        document.getElementById('economicScore').textContent = scores.economic_score;
+        document.getElementById('operationalScore').textContent = scores.operational_score;
+        document.getElementById('finalScore').textContent = scores.final_score;
+        
+        // Update progress bars
+        document.getElementById('medicalBar').style.width = scores.medical_score + '%';
+        document.getElementById('economicBar').style.width = scores.economic_score + '%';
+        document.getElementById('operationalBar').style.width = scores.operational_score + '%';
+        document.getElementById('finalBar').style.width = scores.final_score + '%';
+        
+        // Display alternatives
+        const alternativesList = document.getElementById('alternativesList');
+        alternativesList.innerHTML = '';
+        
+        result.alternatives.forEach((alt, index) => {
+            const altDiv = document.createElement('div');
+            altDiv.className = 'alert alert-secondary mb-2';
+            altDiv.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center">
+                    <span><strong>${index + 1}.</strong> ${alt.option}</span>
+                    <span class="badge bg-primary">${alt.score}</span>
+                </div>
+            `;
+            alternativesList.appendChild(altDiv);
+        });
+        
+        // Show results section
+        document.getElementById('resultsSection').style.display = 'block';
+        
+        // Scroll to results
+        document.getElementById('resultsSection').scrollIntoView({ 
+            behavior: 'smooth' 
+        });
+        
+        showAlert('AI analysis completed successfully!', 'success');
+    }
+    
+    // Action functions
+    function acceptRecommendation() {
+        showAlert('Recommendation accepted and logged!', 'success');
+    }
+    
+    function getNewRecommendation() {
+        document.getElementById('resultsSection').style.display = 'none';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    function printReport() {
+        window.print();
+    }
+    
+    // Initialize displays
+    updatePriorityDisplays();
+</script>
+{% endblock %}

@@ -1,0 +1,278 @@
+<!-- Base HTML template - PASTE CONTENT HERE -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Hospital AI Decision Support{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+    <style>
+        :root {
+            --hospital-primary: #2c5aa0;
+            --hospital-secondary: #1e4a8c;
+            --hospital-success: #28a745;
+            --hospital-warning: #ffc107;
+            --hospital-danger: #dc3545;
+            --hospital-light: #f8f9fa;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--hospital-light);
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--hospital-primary), var(--hospital-secondary));
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.4rem;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--hospital-primary), var(--hospital-secondary));
+            border: none;
+            border-radius: 25px;
+            padding: 10px 25px;
+            font-weight: 500;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--hospital-secondary), var(--hospital-primary));
+            transform: translateY(-1px);
+        }
+        
+        .status-card {
+            background: linear-gradient(135deg, #fff, #f8f9fa);
+            border-left: 4px solid var(--hospital-primary);
+        }
+        
+        .metric-card {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--hospital-primary);
+        }
+        
+        .metric-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .progress {
+            height: 8px;
+            border-radius: 10px;
+        }
+        
+        .alert-custom {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 12px 15px;
+            transition: border-color 0.2s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--hospital-primary);
+            box-shadow: 0 0 0 0.2rem rgba(44, 90, 160, 0.25);
+        }
+        
+        .navbar-nav .nav-link {
+            color: white !important;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: opacity 0.2s ease;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            opacity: 0.8;
+        }
+        
+        .footer {
+            background: var(--hospital-secondary);
+            color: white;
+            padding: 20px 0;
+            margin-top: 50px;
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .decision-result {
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .confidence-high { background: linear-gradient(135deg, #d4edda, #c3e6cb); }
+        .confidence-moderate { background: linear-gradient(135deg, #fff3cd, #ffeaa7); }
+        .confidence-low { background: linear-gradient(135deg, #f8d7da, #f5c6cb); }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand text-white" href="/">
+                <i class="bi bi-hospital"></i> Hospital AI System
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/patient-form">
+                            <i class="bi bi-person-plus"></i> New Patient
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/analytics">
+                            <i class="bi bi-graph-up"></i> Analytics
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="container-fluid px-4 py-4">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container text-center">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6><i class="bi bi-hospital"></i> Hospital AI Decision Support</h6>
+                    <p class="mb-0">Intelligent healthcare management system</p>
+                </div>
+                <div class="col-md-6">
+                    <p class="mb-0">
+                        <i class="bi bi-shield-check"></i> Secure • 
+                        <i class="bi bi-clock"></i> Real-time • 
+                        <i class="bi bi-cpu"></i> AI-Powered
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Common JavaScript -->
+    <script>
+        // Global functions
+        function showLoading() {
+            document.querySelectorAll('.loading-spinner').forEach(el => {
+                el.style.display = 'block';
+            });
+        }
+        
+        function hideLoading() {
+            document.querySelectorAll('.loading-spinner').forEach(el => {
+                el.style.display = 'none';
+            });
+        }
+        
+        function showAlert(message, type = 'info') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show alert-custom`;
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            const container = document.querySelector('main');
+            container.insertBefore(alertDiv, container.firstChild);
+            
+            // Auto-dismiss after 5 seconds
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+        
+        // Update hospital status
+        function updateHospitalStatus() {
+            fetch('/api/hospital-status')
+                .then(response => response.json())
+                .then(data => {
+                    // Update status displays if they exist
+                    const icuElement = document.getElementById('icu-status');
+                    const wardElement = document.getElementById('ward-status');
+                    const edElement = document.getElementById('ed-status');
+                    
+                    if (icuElement) {
+                        icuElement.textContent = `${data.icu.occupied}/${data.icu.capacity}`;
+                    }
+                    if (wardElement) {
+                        wardElement.textContent = `${data.ward.occupied}/${data.ward.capacity}`;
+                    }
+                    if (edElement) {
+                        edElement.textContent = `${data.ed.occupied}/${data.ed.capacity}`;
+                    }
+                })
+                .catch(error => console.error('Error updating status:', error));
+        }
+        
+        // Update status every 30 seconds
+        setInterval(updateHospitalStatus, 30000);
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateHospitalStatus();
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

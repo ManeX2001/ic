@@ -1,0 +1,235 @@
+<!-- Analytics template - PASTE CONTENT HERE -->
+{% extends "base.html" %}
+
+{% block title %}Analytics Dashboard - Hospital AI{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Page Header -->
+    <div class="col-12 mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="h2 mb-1">
+                    <i class="bi bi-graph-up text-primary"></i> Analytics Dashboard
+                </h1>
+                <p class="text-muted">Hospital performance metrics and AI insights</p>
+            </div>
+            <div>
+                <a href="/" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Key Performance Indicators -->
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card status-card">
+            <div class="card-body metric-card">
+                <div class="metric-value text-success">92.5%</div>
+                <div class="metric-label">
+                    <i class="bi bi-check-circle"></i> Decision Accuracy
+                </div>
+                <small class="text-muted">Last 30 days</small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card status-card">
+            <div class="card-body metric-card">
+                <div class="metric-value text-primary">1,247</div>
+                <div class="metric-label">
+                    <i class="bi bi-person-check"></i> Patients Processed
+                </div>
+                <small class="text-muted">This month</small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card status-card">
+            <div class="card-body metric-card">
+                <div class="metric-value text-warning">2.3s</div>
+                <div class="metric-label">
+                    <i class="bi bi-clock"></i> Avg Decision Time
+                </div>
+                <small class="text-muted">Real-time</small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card status-card">
+            <div class="card-body metric-card">
+                <div class="metric-value text-info">$2.4M</div>
+                <div class="metric-label">
+                    <i class="bi bi-currency-dollar"></i> Cost Savings
+                </div>
+                <small class="text-muted">Year to date</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Admission Trends Chart -->
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-graph-up"></i> Admission Trends
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="admissionTrendsChart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Decision Distribution -->
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-pie-chart"></i> Decision Distribution
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="decisionDistributionChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Severity Analysis -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-thermometer-half"></i> Severity Analysis
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="severityChart" height="150"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Age Demographics -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-warning text-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-people"></i> Age Demographics
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="ageChart" height="150"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Performance Metrics Table -->
+    <div class="col-12 mb-4">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-table"></i> Detailed Performance Metrics
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Current Value</th>
+                                <th>Target</th>
+                                <th>Trend</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><i class="bi bi-clock"></i> Average Decision Time</td>
+                                <td>2.3 seconds</td>
+                                <td>&lt; 3 seconds</td>
+                                <td><span class="text-success"><i class="bi bi-arrow-down"></i> -0.2s</span></td>
+                                <td><span class="badge bg-success">Excellent</span></td>
+                            </tr>
+                            <tr>
+                                <td><i class="bi bi-check-circle"></i> Decision Accuracy</td>
+                                <td>92.5%</td>
+                                <td>&gt; 90%</td>
+                                <td><span class="text-success"><i class="bi bi-arrow-up"></i> +1.2%</span></td>
+                                <td><span class="badge bg-success">Excellent</span></td>
+                            </tr>
+                            <tr>
+                                <td><i class="bi bi-hospital"></i> ICU Utilization</td>
+                                <td>85.2%</td>
+                                <td>80-90%</td>
+                                <td><span class="text-warning"><i class="bi bi-arrow-up"></i> +3.1%</span></td>
+                                <td><span class="badge bg-warning">Good</span></td>
+                            </tr>
+                            <tr>
+                                <td><i class="bi bi-person-plus"></i> Patient Throughput</td>
+                                <td>45 patients/day</td>
+                                <td>&gt; 40 patients/day</td>
+                                <td><span class="text-success"><i class="bi bi-arrow-up"></i> +5</span></td>
+                                <td><span class="badge bg-success">Excellent</span></td>
+                            </tr>
+                            <tr>
+                                <td><i class="bi bi-currency-dollar"></i> Cost per Decision</td>
+                                <td>$12.50</td>
+                                <td>&lt; $15</td>
+                                <td><span class="text-success"><i class="bi bi-arrow-down"></i> -$1.20</span></td>
+                                <td><span class="badge bg-success">Excellent</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Recent Insights -->
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-lightbulb"></i> AI Insights
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info alert-custom">
+                    <i class="bi bi-info-circle"></i>
+                    <strong>Peak Hours:</strong> Highest admission requests occur between 2-4 PM and 8-10 PM
+                </div>
+                <div class="alert alert-success alert-custom">
+                    <i class="bi bi-check-circle"></i>
+                    <strong>Efficiency Gain:</strong> AI decisions are 40% faster than traditional methods
+                </div>
+                <div class="alert alert-warning alert-custom">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <strong>Capacity Alert:</strong> ICU approaching capacity - consider additional resources
+                </div>
+                <div class="alert alert-primary alert-custom">
+                    <i class="bi bi-graph-up"></i>
+                    <strong>Trend:</strong> 15% increase in emergency admissions this month
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header bg-primary text-
