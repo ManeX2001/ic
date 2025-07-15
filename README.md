@@ -9,7 +9,7 @@
 
 2. Run the application:
    ```bash
-   python simple_hospital_app.py
+   python route/simple_hospital_app.py
    ```
 
 3. Open your browser to: http://localhost:5000
