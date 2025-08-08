@@ -1223,7 +1223,7 @@ app = Flask(__name__)
 # MIMIC DATA LOADER & PROCESSOR
 # ============================================================================
 class MIMICDataProcessor:
-    def __init__(self, base_path='./data/dataset Updated/'):
+    def __init__(self, base_path='/workspaces/ic/data/dataset Updated'):
         self.base_path = base_path
         self.data = {}
         self.real_stats = {}
@@ -1990,7 +1990,7 @@ class DeepLearningHospitalEngine:
                 'occupied': icu_occupied,
                 'capacity': self.icu_capacity,
                 'utilization': round(icu_occupied / self.icu_capacity * 100, 1),
-                'definition': f'ICU from MIMIC data - Severity 8-10, ${self.costs.get("icu", 0)}/day',
+                'definition': f'ICU from MIMIC data - Severity 8-10, ${self.costs["icu"]}/day',
                 'status': 'Critical' if icu_occupied >= self.icu_capacity * 0.9 else 'Normal',
                 'daily_cost': self.costs['icu'],
                 'data_source': 'MIMIC ICU stays'

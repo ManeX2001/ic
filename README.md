@@ -1,29 +1,66 @@
-# Hospital AI Web Application
+# MIMIC-Enhanced Hospital Management System
+
+A Flask-based hospital management application with deep learning capabilities and real MIMIC dataset integration.
 
 ## Quick Start
 
-1. Install Python dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+### Step 1: Navigate to the project directory
+```bash
+cd routes
+```
 
-2. Run the application:
-   ```bash
-   python route/simple_hospital_app.py
-   ```
+### Step 2: Install dependencies
+```bash
+pip install -r requirements.txt
+```
 
-3. Open your browser to: http://localhost:5000
+### Step 3: Run the application
+```bash
+python simple_hospital_app.py
+```
 
-## File Structure
+### Step 4: Open the website
+Once you see the message "Running on http://127.0.0.1:5000", open your web browser and go to:
 
-- `app.py` - Main Flask application
-- `templates/` - HTML templates
-- `static/` - CSS, JavaScript, images
-- `models/` - Data models and AI engine
-- `routes/` - URL routes and views
+**http://localhost:5000**
 
-## Next Steps
+## What You'll See
 
-1. Paste the provided code into each file
-2. Customize as needed
-3. Run and test your application!
+When the app starts, you'll see initialization messages like:
+```
+🔄 Initializing MIMIC-Enhanced Hospital System with Deep Learning...
+📊 Loading MIMIC dataset...
+✅ Loading PATIENTS.csv...
+✅ Loading ICUSTAYS.csv...
+🏥 MIMIC-INTEGRATED HOSPITAL AI STARTING...
+🌐 Access: http://localhost:5000
+```
+
+## Available Features
+
+- **Dashboard** - Hospital overview with real MIMIC data
+- **Bed Management** - ICU, Ward, and ED capacity management  
+- **Deep Learning** - AI-powered hospital optimization
+- **Analytics** - MIMIC dataset insights and predictions
+- **Discharge Recommendations** - Patient discharge planning
+
+## Requirements
+
+- Python 3.12+
+- Flask 2.3.3
+- MIMIC dataset files (automatically loaded from `/data/dataset Updated/`)
+
+## Stopping the Application
+
+Press `Ctrl+C` in the terminal to stop the server.
+
+## Troubleshooting
+
+**Problem**: Can't access the website
+- **Solution**: Make sure the terminal shows "Running on http://127.0.0.1:5000" before opening the browser
+
+**Problem**: "low >= high" errors during startup  
+- **Solution**: These are normal and don't affect functionality - the app will still work
+
+**Problem**: Port already in use
+- **Solution**: Stop any other applications running on port 5000, or change the port in the code
